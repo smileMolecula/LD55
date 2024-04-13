@@ -5,17 +5,18 @@ TagManager:
   serializedVersion: 2
   tags:
   - Friend
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - flashlight
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Wall
+  - StrongWall
+  - Enemy
   - 
   - 
   - 

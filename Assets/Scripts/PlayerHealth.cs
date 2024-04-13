@@ -2,19 +2,16 @@ using System;
 using UnityEngine;
 public class PlayerHealth : MonoBehaviour, IHealth
 {
-
-    void Start()
+    [SerializeField] private Transform healthPanel;
+    private Animator animator;
+    private int health = 3;
+    private void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        animator = GetComponent<Animator>();
     }
     public void DecreaseHealth()
     {
-        
+        health--;
+        healthPanel.GetChild(health).gameObject.SetActive(false);
     }
 }

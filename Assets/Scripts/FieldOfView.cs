@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class FieldOfView : MonoBehaviour {
@@ -9,9 +8,12 @@ public class FieldOfView : MonoBehaviour {
     [Range(0,360)]
     [SerializeField] private float angleView;
     [SerializeField] private float viewDistance;
+    [SerializeField] private LayerMask targetMask;
     private Vector3 origin;
     private float startingAngle;
-
+    private Vector3 dirToTarget;
+    private Vector3 direction;
+    public Action seePlayer;
     private void Start() {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
@@ -19,8 +21,23 @@ public class FieldOfView : MonoBehaviour {
         // viewDistance = 50f;
         // origin = Vector3.zero;
     }
+    // private void FindVisibleTargets()
+	// {
+	// 	// this.target = null;
+	// 	Collider2D[] array = Physics2D.OverlapCircleAll(origin, viewDistance, targetMask);
 
+	// 	for (int i = 0; i < array.Length; i++)
+	// 	{
+	// 		dirToTarget = (array[i].transform.position - origin).normalized;
+    //         Debug.DrawLine(origin, dirToTarget);
+	// 		if (Vector3.Angle(direction, dirToTarget) < angleView / 2f + 5f)
+	// 		{
+	// 			seePlayer?.Invoke();
+	// 		}
+	// 	}
+	// }
     private void LateUpdate() {
+        // FindVisibleTargets();
         int rayCount = 50;
         float angle = startingAngle;
         float angleIncrease = angleView / rayCount;
@@ -72,6 +89,7 @@ public class FieldOfView : MonoBehaviour {
     }
 
     public void SetAimDirection(Vector3 aimDirection) {
+        direction = aimDirection;
         startingAngle = GetAngleFromVectorFloat(aimDirection) + angleView / 2f;
     }
     public static float GetAngleFromVectorFloat(Vector3 dir) {

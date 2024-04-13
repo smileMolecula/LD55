@@ -25,4 +25,11 @@ public class PlayerController : MonoBehaviour
             hit.collider.GetComponent<IFriend>().Activation();
         }
     }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.CompareTag("Enemy"))
+        {
+            decreaseHealth?.Invoke();
+        }
+    }
 }
