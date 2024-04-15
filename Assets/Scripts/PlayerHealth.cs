@@ -11,7 +11,10 @@ public class PlayerHealth : MonoBehaviour, IHealth
     }
     public void DecreaseHealth()
     {
-        health--;
-        healthPanel.GetChild(health).gameObject.SetActive(false);
+        if(health > 0)
+        {
+            health--;
+            healthPanel.GetChild(health).gameObject.SetActive(false);
+        }
     }
 }

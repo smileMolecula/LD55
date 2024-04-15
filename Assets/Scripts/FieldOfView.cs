@@ -12,30 +12,10 @@ public class FieldOfView : MonoBehaviour {
     private Vector3 origin;
     private float startingAngle;
     private Vector3 dirToTarget;
-    private Vector3 direction;
-    public Action seePlayer;
     private void Start() {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-        // fov = 90f;
-        // viewDistance = 50f;
-        // origin = Vector3.zero;
     }
-    // private void FindVisibleTargets()
-	// {
-	// 	// this.target = null;
-	// 	Collider2D[] array = Physics2D.OverlapCircleAll(origin, viewDistance, targetMask);
-
-	// 	for (int i = 0; i < array.Length; i++)
-	// 	{
-	// 		dirToTarget = (array[i].transform.position - origin).normalized;
-    //         Debug.DrawLine(origin, dirToTarget);
-	// 		if (Vector3.Angle(direction, dirToTarget) < angleView / 2f + 5f)
-	// 		{
-	// 			seePlayer?.Invoke();
-	// 		}
-	// 	}
-	// }
     private void LateUpdate() {
         // FindVisibleTargets();
         int rayCount = 50;
@@ -89,8 +69,11 @@ public class FieldOfView : MonoBehaviour {
     }
 
     public void SetAimDirection(Vector3 aimDirection) {
-        direction = aimDirection;
         startingAngle = GetAngleFromVectorFloat(aimDirection) + angleView / 2f;
+    }
+    public void SetAngle(float angle)
+    {
+        startingAngle = angle;
     }
     public static float GetAngleFromVectorFloat(Vector3 dir) {
             dir = dir.normalized;

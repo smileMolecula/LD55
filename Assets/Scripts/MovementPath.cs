@@ -3,27 +3,16 @@ using UnityEngine;
 public class MovementPath : MonoBehaviour
 {
 
-    public enum PathTypes
+    [SerializeField] private enum PathTypes
     {
         linear,
         loop
     }
-    public PathTypes PathType;
-    public int movementDirection = 1;
-    public int movengTo = 0;
-    LineRenderer line;
-    public Transform[] PathElements;
-    private void Start() {
-        line.positionCount = PathElements.Length;
-        
-        for(int i = 0;i < PathElements.Length;i++)
-        {
-            line.SetPosition(i,new Vector3(PathElements[i].position.x,17,PathElements[i].position.z));
-        }
-        line.enabled = false;
-    }
-
-    public void OnDrawGizmos() //Рисует линии между точками
+    [SerializeField] private PathTypes pathType;
+    private int movingTo = 0;
+    private bool reverseDirection = false;
+    [SerializeField] private Transform[] PathElements;
+    public void OnDrawGizmos()
     {
         if(PathElements == null || PathElements.Length < 2)
         {
@@ -33,47 +22,55 @@ public class MovementPath : MonoBehaviour
         {
             Gizmos.DrawLine(PathElements[i - 1].position,PathElements[i].position);
         }
-        if(PathType == PathTypes.loop)
+        if(pathType == PathTypes.loop)
         {
             Gizmos.DrawLine(PathElements[0].position,PathElements[PathElements.Length - 1].position);
         }
     }
-    public IEnumerator<Transform> GetNextPathPoint() //Находит позиции точек
+    public void NextPathPoint()
     {
-        if(PathElements == null || PathElements.Length < 1)
+        if(pathType == PathTypes.loop)
         {
-            yield break;
+            if(movingTo < PathElements.Length - 1)
+            {
+                movingTo++;
+            }
+            else
+            {
+                movingTo = 0;
+            }  
         }
-        while (true)
+        else
         {
-            yield return PathElements[movengTo];
-            if(PathElements.Length == 1)
+            if(!reverseDirection)
             {
-                continue;
-            } 
-            if(PathType == PathTypes.linear)
-            {
-                if(movengTo <= 0)
+                if(movingTo < PathElements.Length - 1)
                 {
-                    movementDirection = 1;
+                    movingTo++;
                 }
-                else if(movengTo >= PathElements.Length - 1)
+                else
                 {
-                    movementDirection = -1;
+                    reverseDirection = !reverseDirection;
+                    movingTo--;
                 }
             }
-            movengTo = movengTo + movementDirection;
-            if(PathType == PathTypes.loop)
+            else
             {
-                if(movengTo >= PathElements.Length)
+                if(movingTo > 0)
                 {
-                    movengTo = 0;
+                    movingTo--;
                 }
-                if(movengTo < 0)
+                else
                 {
-                    movengTo = PathElements.Length - 1;
+                    reverseDirection = !reverseDirection;
+                    movingTo++;
                 }
+                
             }
         }
+    }
+    public Vector3 GetPointPosition()
+    {
+        return PathElements[movingTo].position;
     }
 }

@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private event Action decreaseHealth;
+    public IHealth ihealth;
     private Camera cam;
     void Start()
     {
         cam = Camera.main;
-        decreaseHealth += GetComponent<IHealth>().DecreaseHealth;
+        ihealth = GetComponent<IHealth>();
     }
     void Update()
     {
@@ -19,17 +19,11 @@ public class PlayerController : MonoBehaviour
     }
     private void ActivationFriend()
     {
-        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+        RaycastHit2D hit = Physics2D.Raycast(cam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
         if(hit.collider != null && hit.collider.CompareTag("Friend"))
         {
             hit.collider.GetComponent<IFriend>().Activation();
         }
     }
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if(other.CompareTag("Enemy"))
-        {
-            decreaseHealth?.Invoke();
-        }
-    }
+
 }
