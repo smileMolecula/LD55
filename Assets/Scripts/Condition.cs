@@ -1,9 +1,16 @@
 using UnityEngine;
 public abstract class Condition : MonoBehaviour
 {
-    private AudioSource audioSource;
-    private Animator animator;
-    [SerializeField] private AudioClip audioClip;
-    private ParticleSystem effect;
+    protected Animator animator;
+    protected ParticleSystem effect;
+    protected AudioSource audioSource;
+    [SerializeField] protected AudioClip audioClip;
+    [SerializeField] protected AnimationClip animClip;
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+        effect = GetComponent<ParticleSystem>();
+        audioSource = GetComponent<AudioSource>();
+    }
     public abstract void ActivationCondition();
 }

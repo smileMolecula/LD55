@@ -22,7 +22,8 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(cam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
         if(hit.collider != null && hit.collider.CompareTag("Friend"))
         {
-            hit.collider.GetComponent<IFriend>().Activation();
+            hit.collider.transform.GetComponentInParent<IFriend>().Activation();
+
         }
     }
 
