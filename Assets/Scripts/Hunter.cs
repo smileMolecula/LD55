@@ -2,12 +2,11 @@ using UnityEngine.AI;
 using UnityEngine;
 using System;
 using System.Collections;
-using UnityEditor.Experimental.GraphView;
 
 public class Hunter : MonoBehaviour
 {
     [SerializeField] private IAbility iAbility;
-    private float fear;
+    private float fear = 100f;
     [SerializeField] private FieldOfView fieldOfView;
     [SerializeField] private FlashlightCollider flashlightCollider;
     [SerializeField] private float speedTurn = 30f;
@@ -17,9 +16,10 @@ public class Hunter : MonoBehaviour
     private Transform transformflashlight;
     [SerializeField] private Condition seePlayerCondition;
     [SerializeField] private Condition frightCondition;
+    [SerializeField] private Condition escapeCondition;
+    private FearStripeHunter fearStripe;
     private bool isRun = true;
-    
-    private Vector3 Target
+    public Vector3 Target
     {
         get{return target;}
         set
@@ -30,8 +30,10 @@ public class Hunter : MonoBehaviour
     }
     private void Awake()
     {
+        fearStripe = GetComponent<FearStripeHunter>();
         flashlightCollider.seePlayer += SeePlayer;
         flashlightCollider.seeMysticism += Fright;
+        fearStripe.isFright += Escape;
         movementPath = GetComponent<MovementPath>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         transformflashlight = transform.GetChild(0);
@@ -84,10 +86,10 @@ public class Hunter : MonoBehaviour
     private void Fright(Vector2 positionObject)
     {
         Debug.Log("Обосрался");
+        fear -= 20f;
         frightCondition.ActivationCondition();
         StartCoroutine(FrightCoroutine(positionObject));
     }
-
     private IEnumerator FrightCoroutine(Vector2 positionObject)
     {
         isRun = false;
@@ -99,5 +101,14 @@ public class Hunter : MonoBehaviour
         Target = plannedPosition;
         isRun = true;
     }
-    
+    private void Escape()
+    {
+        escapeCondition.ActivationCondition();
+        StartCoroutine(EscapeCorutine());
+    }
+    private IEnumerator EscapeCorutine()
+    {
+        yield return new WaitForSeconds(1f);
+        FindObjectOfType<UI>().PanelGameOver();
+    }
 }

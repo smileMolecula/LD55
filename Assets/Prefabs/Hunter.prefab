@@ -682,8 +682,8 @@ MonoBehaviour:
   fieldOfView: {fileID: 0}
   flashlightCollider: {fileID: 4350576462944091846}
   speedTurn: 30
-  seePlayer: {fileID: 0}
-  fright: {fileID: 0}
+  seePlayerCondition: {fileID: 0}
+  frightCondition: {fileID: 0}
 --- !u!114 &8415139240759707276
 MonoBehaviour:
   m_ObjectHideFlags: 0
