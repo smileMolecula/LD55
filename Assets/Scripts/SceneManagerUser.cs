@@ -20,6 +20,10 @@ public class SceneManagerUser : MonoBehaviour
     {
         SceneManager.LoadScene("Menu");
     }
+    public void PlayNextLevel()
+    {
+        SceneManager.LoadScene("Level " + (++dataSave.numberCompletedLevels + 1));
+    }
 }
 public class DataSave
 {

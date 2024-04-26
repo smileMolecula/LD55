@@ -1,14 +1,35 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public IHealth ihealth;
+    public IHealth ihealth{get;private set;}
     private Camera cam;
+    private int numbersHunters;
+    private PlayerMovement playerMovement;
+    private FollowCamera followCamera;
+    private ManaStripePlayer manaStripe;
+    public int NumbersHunters
+    {
+        get{return numbersHunters;}
+        set
+        {
+            numbersHunters = value;
+            if(numbersHunters == 0)
+            {
+                StartCoroutine(Win());
+            }
+        }    
+    }
     void Start()
     {
         cam = Camera.main;
         ihealth = GetComponent<IHealth>();
+        NumbersHunters = FindObjectsOfType<Hunter>().Length;
+        playerMovement = GetComponent<PlayerMovement>();
+        followCamera = cam.GetComponent<FollowCamera>();
+        manaStripe = GetComponent<ManaStripePlayer>();
     }
     void Update()
     {
@@ -22,8 +43,28 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(cam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
         if(hit.collider != null && hit.collider.CompareTag("Friend"))
         {
-            hit.collider.GetComponent<IFriend>().Activation();
+            IInteractive interactiveObject = hit.collider.GetComponent<IInteractive>();
+            if(manaStripe.Mana > interactiveObject.TakeMana())
+            {
+                interactiveObject.Activation();
+                manaStripe.TakeMana(interactiveObject.TakeMana());
+            }   
         }
     }
-
+    private IEnumerator Win()
+    {
+        yield return new WaitForSeconds(1f);
+        FindObjectOfType<UI>().PanelWin();
+    }
+    public void SeeHunter()
+    {
+        followCamera.ShakeCamera();
+        StartCoroutine(Stupor());
+    }
+    private IEnumerator Stupor()
+    {
+        playerMovement.IsRun = false;
+        yield return new WaitForSeconds(2f);
+        playerMovement.IsRun = true;
+    }
 }

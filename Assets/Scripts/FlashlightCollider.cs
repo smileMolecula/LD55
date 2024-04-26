@@ -4,8 +4,7 @@ using UnityEngine;
 public class FlashlightCollider : MonoBehaviour
 {
     public event Action<Vector2> seePlayer;
-    public event Action<Vector2> seeMysticism;
-    private string nameMysticism = "";
+    public event Action<Vector2,int> seeMysticism;
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.CompareTag("Player"))
@@ -13,7 +12,9 @@ public class FlashlightCollider : MonoBehaviour
             if(Physics2D.Raycast(transform.position,(other.transform.position - transform.position).normalized).collider.CompareTag("Player"))
             {
                 seePlayer?.Invoke(other.transform.position);
-                FindObjectOfType<PlayerController>().ihealth.DecreaseHealth();
+                PlayerController player = FindObjectOfType<PlayerController>();
+                player.ihealth.DecreaseHealth();
+                player.SeeHunter();
             }
         }
     }
@@ -23,11 +24,11 @@ public class FlashlightCollider : MonoBehaviour
         {
             if(Physics2D.Raycast(transform.position,(other.transform.position - transform.position).normalized).collider.CompareTag("Friend"))
             {
-                Debug.Log("Обосрались");
-                if(other.GetComponent<IFriend>().GetActivation())
+                IInteractive interactiveObject = other.GetComponent<IInteractive>();
+                if(interactiveObject.GetActivation())
                 {
-                    seeMysticism?.Invoke(other.transform.position);
-                    nameMysticism = other.name;
+                    seeMysticism?.Invoke(other.transform.position,interactiveObject.GetFear());
+                    other.GetComponent<IFriend>().Death();
                 }
             }
         }

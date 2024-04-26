@@ -1,14 +1,12 @@
 using UnityEngine.AI;
 using UnityEngine;
-using System;
 using System.Collections;
 
 public class Hunter : MonoBehaviour
 {
     [SerializeField] private IAbility iAbility;
-    private float fear = 100f;
     [SerializeField] private FieldOfView fieldOfView;
-    [SerializeField] private FlashlightCollider flashlightCollider;
+    [field: SerializeField] public FlashlightCollider flashlightCollider{get; private set;}
     [SerializeField] private float speedTurn = 30f;
     private MovementPath movementPath;
     private NavMeshAgent navMeshAgent;
@@ -17,8 +15,12 @@ public class Hunter : MonoBehaviour
     [SerializeField] private Condition seePlayerCondition;
     [SerializeField] private Condition frightCondition;
     [SerializeField] private Condition escapeCondition;
+    [SerializeField] private Condition idleCondition;
+    [SerializeField] private Condition runCondition;
     private FearStripeHunter fearStripe;
     private bool isRun = true;
+    private bool isEscape = false;
+    private Vector2 direction;
     public Vector3 Target
     {
         get{return target;}
@@ -31,12 +33,12 @@ public class Hunter : MonoBehaviour
     private void Awake()
     {
         fearStripe = GetComponent<FearStripeHunter>();
+        movementPath = GetComponent<MovementPath>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
         flashlightCollider.seePlayer += SeePlayer;
         flashlightCollider.seeMysticism += Fright;
         fearStripe.isFright += Escape;
-        movementPath = GetComponent<MovementPath>();
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        transformflashlight = transform.GetChild(0);
+        transformflashlight = flashlightCollider.transform;
         navMeshAgent.updateRotation = false;
 		navMeshAgent.updateUpAxis = false;
         Target = movementPath.GetPointPosition();
@@ -48,10 +50,10 @@ public class Hunter : MonoBehaviour
         {
             if(Vector2.Distance(transform.position,Target) < 0.3f)
             {
-                GoToNextGoal();
+                StartCoroutine(Idle());
             }
+            direction = navMeshAgent.steeringTarget - transform.position;
         }
-        Vector3 direction = navMeshAgent.steeringTarget - transform.position;
         if(direction.x > 0)
         {
             transform.eulerAngles = new Vector3(0,0,0);
@@ -78,37 +80,66 @@ public class Hunter : MonoBehaviour
         isRun = false;
         navMeshAgent.enabled = false;
         target = positionPlayer;
-        yield return new WaitForSeconds(1f);
+        direction = (positionPlayer - (Vector2)transform.position).normalized;
+        yield return new WaitForSeconds(4f);
         navMeshAgent.enabled = true;
         Target = positionPlayer;
         isRun = true;
     }
-    private void Fright(Vector2 positionObject)
+    private IEnumerator Idle()
     {
-        Debug.Log("Обосрался");
-        fear -= 20f;
+        isRun = false;
+        navMeshAgent.enabled = false;
+        int numberHunterTurs = Random.Range(2,6);
+        idleCondition.ActivationCondition();
+        float positionX = 2f;
+        for(int i = 0; i < numberHunterTurs; i++)
+        {
+            int randomValue = Random.Range(-10,10);
+            if(randomValue > 0)
+            {
+                positionX = 2f;
+            }
+            else
+            {
+                positionX = -2f;
+            }
+            Vector3 randomPosition = new Vector2(transform.position.x + positionX,transform.position.y + Random.Range(-10,10));
+            direction = randomPosition - transform.position;
+            yield return new WaitForSeconds(1.5f);
+        }
+        isRun = true;
+        navMeshAgent.enabled = true;
+        GoToNextGoal();
+        runCondition.ActivationCondition();
+    }
+    private void Fright(Vector2 positionObject, int fear)
+    {
         frightCondition.ActivationCondition();
+        fearStripe.Fear(fear);
         StartCoroutine(FrightCoroutine(positionObject));
     }
     private IEnumerator FrightCoroutine(Vector2 positionObject)
     {
-        isRun = false;
-        navMeshAgent.enabled = false;
-        Vector2 plannedPosition = Target;
-        target = positionObject;
-        yield return new WaitForSeconds(1f);
-        navMeshAgent.enabled = true;
-        Target = plannedPosition;
-        isRun = true;
+        if(!isEscape)
+        {
+            isRun = false;
+            navMeshAgent.enabled = false;
+            Vector2 plannedPosition = Target;
+            target = positionObject;
+            yield return new WaitForSeconds(3f);
+            navMeshAgent.enabled = true;
+            Target = plannedPosition;
+            isRun = true;
+        }
     }
     private void Escape()
     {
+        StopAllCoroutines();
+        isRun = true;
+        isEscape = true;
+        runCondition.ActivationCondition();
         escapeCondition.ActivationCondition();
-        StartCoroutine(EscapeCorutine());
-    }
-    private IEnumerator EscapeCorutine()
-    {
-        yield return new WaitForSeconds(1f);
-        FindObjectOfType<UI>().PanelGameOver();
+        FindObjectOfType<PlayerController>().NumbersHunters--;
     }
 }

@@ -22,7 +22,6 @@ public class SetValueAudio : MonoBehaviour
         audioMixer = FindObjectOfType<AudioManager>().audioMixer;
         scroller = GetComponent<Slider>();
         image = GetComponent<Image>();
-        scroller.value = GetMixerVolume();
     }
     public void SetVolume()
     {

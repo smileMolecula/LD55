@@ -5,33 +5,46 @@ using System;
 
 public class FearStripeHunter : MonoBehaviour
 {
-    [SerializeField] Image stripe;
+    [SerializeField] private Image stripe;
+    private Transform stripeTransform;
     public event Action isFright;
-    private float fear;
+    private int fear = 0;
+    private int fearOld = 0;
     [SerializeField] private float speed;
-    [SerializeField] private Transform canvasTransform;
-    public void SetFear()
+    private bool animEnd = true;
+    private void Start()
     {
-        StartCoroutine(SetFearCorutine());
+        stripeTransform = stripe.transform;
     }
     private void LateUpdate()
     {
-        canvasTransform.position = transform.position;
+        stripeTransform.rotation = Quaternion.identity;
+    }
+    public void Fear(int fear)
+    {
+        this.fear += fear;
+        if(animEnd)
+        {
+            animEnd = false;
+            StartCoroutine(SetFearCorutine());
+        }
     }
     private IEnumerator SetFearCorutine()
     {
-        float fearNew = fear - 20f;
-        float fearCurrent = fearNew;
-        if(fear <= 0)
+        float fearCurrent = fearOld;
+        float time = 0;
+        if(fear >= 100)
         {
             isFright?.Invoke();
         }
-        while(fearCurrent > fearNew)
+        while(fearCurrent < fear)
         {
-            fearCurrent = Mathf.Lerp(fear,fearNew,speed * Time.deltaTime);
-            stripe.fillAmount = fearCurrent;
+            time += Time.deltaTime * speed;
+            fearCurrent = Mathf.Lerp(fearOld, fear,time);
+            stripe.fillAmount = fearCurrent / 100;
             yield return null;
         }
-        fear = fearNew;
+        fearOld = fear;
+        animEnd = true;
     }
 }

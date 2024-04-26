@@ -16,7 +16,7 @@ public class PlayerHealth : MonoBehaviour, IHealth
             health--;
             healthPanel.GetChild(health).gameObject.SetActive(false);
         }
-        else
+        if(health == 0)
         {
             FindObjectOfType<UI>().PanelGameOver();
         }

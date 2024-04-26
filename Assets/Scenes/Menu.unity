@@ -686,3 +686,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panelGameOver: {fileID: 0}
+  panelWin: {fileID: 0}
