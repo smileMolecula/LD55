@@ -52,5 +52,6 @@
         "Temp/": true
     },
     "dotnet.preferCSharpExtension": true,
-    "dotnet.defaultSolution": "LD55.sln"
+    "dotnet.defaultSolution": "LD55.sln",
+    "CodeGPT.apiKey": "Nvidia"
 }

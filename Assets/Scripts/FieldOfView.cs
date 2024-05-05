@@ -8,7 +8,6 @@ public class FieldOfView : MonoBehaviour {
     [Range(0,360)]
     [SerializeField] private float angleView;
     [SerializeField] private float viewDistance;
-    [SerializeField] private LayerMask targetMask;
     private Vector3 origin;
     private float startingAngle;
     private Vector3 dirToTarget;

@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Missile
   - Hunter
+  - Mana
   layers:
   - Default
   - TransparentFX
@@ -22,11 +23,11 @@ TagManager:
   - floor
   - DeathZone
   - RigidTransparentWall
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Mana
+  - PlayerCollider
+  - PlayerSolidCollider
+  - Thing
+  - InteractiveObject
   - 
   - 
   - 

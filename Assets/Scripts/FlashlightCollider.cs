@@ -5,6 +5,7 @@ public class FlashlightCollider : MonoBehaviour
 {
     public event Action<Vector2> seePlayer;
     public event Action<Vector2,int> seeMysticism;
+    [SerializeField] private LayerMask layerMask;
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.CompareTag("Player"))
@@ -22,7 +23,7 @@ public class FlashlightCollider : MonoBehaviour
     {
         if(other.CompareTag("Friend"))
         {
-            if(Physics2D.Raycast(transform.position,(other.transform.position - transform.position).normalized).collider.CompareTag("Friend"))
+            if(Physics2D.Raycast(transform.position,(other.transform.position - transform.position).normalized,layerMask).collider.CompareTag("Friend"))
             {
                 IInteractive interactiveObject = other.GetComponent<IInteractive>();
                 if(interactiveObject.GetActivation())

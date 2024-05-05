@@ -2,8 +2,8 @@ using UnityEngine;
 public abstract class Condition : MonoBehaviour
 {
     protected Animator animator;
-    protected GameObject effectPrefab;
     protected AudioSource audioSource;
+    [SerializeField] protected GameObject effectPrefab;
     [SerializeField] protected AudioClip audioClip;
     [SerializeField] protected AnimationClip animClip;
     protected void Start()

@@ -47,8 +47,17 @@ public class PlayerController : MonoBehaviour
             if(manaStripe.Mana > interactiveObject.TakeMana())
             {
                 interactiveObject.Activation();
-                manaStripe.TakeMana(interactiveObject.TakeMana());
+                manaStripe.UseMana(interactiveObject.TakeMana());
             }   
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.CompareTag("Mana"))
+        {
+            Mana mana = other.GetComponent<Mana>();
+            manaStripe.TakeMana(mana.TookMana());
+            Destroy(mana.gameObject);
         }
     }
     private IEnumerator Win()

@@ -18,6 +18,10 @@ public class ManaStripePlayer : MonoBehaviour
     }
     public void TakeMana(float Mana)
     {
+        this.Mana += Mana;
+    }
+    public void UseMana(float Mana)
+    {
         this.Mana -= Mana;
     }
 }

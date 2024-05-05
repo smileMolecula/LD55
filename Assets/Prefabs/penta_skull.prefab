@@ -101,6 +101,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spiderCreateCondition: {fileID: 4462365499146028693}
   spiderDeathCondition: {fileID: 8118100872656692483}
+  fear: 20
+  timeRecharge: 5
+  mana: 20
 --- !u!58 &2091917657056648319
 CircleCollider2D:
   m_ObjectHideFlags: 0

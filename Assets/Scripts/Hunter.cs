@@ -128,6 +128,7 @@ public class Hunter : MonoBehaviour
             Vector2 plannedPosition = Target;
             target = positionObject;
             yield return new WaitForSeconds(3f);
+            runCondition.ActivationCondition();
             navMeshAgent.enabled = true;
             Target = plannedPosition;
             isRun = true;
@@ -138,7 +139,6 @@ public class Hunter : MonoBehaviour
         StopAllCoroutines();
         isRun = true;
         isEscape = true;
-        runCondition.ActivationCondition();
         escapeCondition.ActivationCondition();
         FindObjectOfType<PlayerController>().NumbersHunters--;
     }

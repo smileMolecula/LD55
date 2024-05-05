@@ -12,7 +12,7 @@ public class MovementPath : MonoBehaviour
     private int movingTo = 0;
     private bool reverseDirection = false;
     [SerializeField] private Transform[] PathElements;
-    public void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         if(PathElements == null || PathElements.Length < 2)
         {
