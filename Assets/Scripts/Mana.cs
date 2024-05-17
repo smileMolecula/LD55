@@ -6,7 +6,7 @@ using UnityEngine;
 public class Mana : MonoBehaviour
 {
     public event Action tookMana;
-    private float mana = 5f;
+    [SerializeField] private float mana = 5f;
     [SerializeField] private Condition tookManaCondition;
     public float TookMana()
     {

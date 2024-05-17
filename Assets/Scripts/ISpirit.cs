@@ -1,4 +1,4 @@
-public interface IFriend
+public interface ISpirit
 {
     public void Death();
 }

@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7927e9dd0fb51042a4370058d1e55f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mana: 10
   tookManaCondition: {fileID: 6335481471474658018}
 --- !u!114 &6335481471474658018
 MonoBehaviour:
@@ -128,7 +129,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 1.5
 --- !u!50 &6335481471556532805
 Rigidbody2D:
   serializedVersion: 4
@@ -208,6 +209,18 @@ PrefabInstance:
     - target: {fileID: 478590, guid: 31f1a82435965944bb6d0f5989c42f1e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19935926, guid: 31f1a82435965944bb6d0f5989c42f1e, type: 3}
+      propertyPath: m_SortingOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 19991552, guid: 31f1a82435965944bb6d0f5989c42f1e, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 199768905068126778, guid: 31f1a82435965944bb6d0f5989c42f1e, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 31f1a82435965944bb6d0f5989c42f1e, type: 3}

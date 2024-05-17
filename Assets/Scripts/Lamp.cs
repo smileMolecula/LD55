@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Lamp : MonoBehaviour, IInteractive
+public class Lamp : MonoBehaviour, IInteractive, IMystical
 {
     [SerializeField] private Condition flickeringLamp;
     [SerializeField] private int fear;

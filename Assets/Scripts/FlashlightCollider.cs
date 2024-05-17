@@ -25,11 +25,11 @@ public class FlashlightCollider : MonoBehaviour
         {
             if(Physics2D.Raycast(transform.position,(other.transform.position - transform.position).normalized,layerMask).collider.CompareTag("Friend"))
             {
-                IInteractive interactiveObject = other.GetComponent<IInteractive>();
-                if(interactiveObject.GetActivation())
+                IMystical mysticalObject = other.GetComponent<IMystical>();
+                if(mysticalObject.GetActivation())
                 {
-                    seeMysticism?.Invoke(other.transform.position,interactiveObject.GetFear());
-                    other.GetComponent<IFriend>().Death();
+                    other.GetComponent<ISpirit>()?.Death();
+                    seeMysticism?.Invoke(other.transform.position,mysticalObject.GetFear());
                 }
             }
         }

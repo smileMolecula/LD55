@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     private void ActivationFriend()
     {
         RaycastHit2D hit = Physics2D.Raycast(cam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-        if(hit.collider != null && hit.collider.CompareTag("Friend"))
+        if(hit.collider != null && hit.collider.GetComponent<IInteractive>() != null)
         {
             IInteractive interactiveObject = hit.collider.GetComponent<IInteractive>();
             if(manaStripe.Mana > interactiveObject.TakeMana())

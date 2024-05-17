@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpiderPenta : MonoBehaviour , IInteractive , IFriend
+public class SpiderPenta : MonoBehaviour , IInteractive
 {
-    [SerializeField] private Condition spiderCreateCondition;
-    [SerializeField] private Condition spiderDeathCondition;
-    [SerializeField] private int fear = 20;
+    [SerializeField] private GameObject spiritPrefab;
     [SerializeField] private float timeRecharge = 5f;
     [SerializeField] private float mana = 1f;
     private bool isActivate = false;
@@ -22,25 +20,27 @@ public class SpiderPenta : MonoBehaviour , IInteractive , IFriend
         {
             isActivate = true;
             isClickable = false;
-            spiderCreateCondition.gameObject.SetActive(true);
-            spiderCreateCondition.ActivationCondition();
+            material.SetFloat("_Arc1", 360f);
+            Spirit spirit = Instantiate(spiritPrefab,transform.position,Quaternion.identity).GetComponent<Spirit>();
+            spirit.deathSpirit += DeathSpirit;
         }
     }
-    public bool GetActivation() => isActivate;
-    public void Death()
+    private void OnDestroy()
+    {
+        material.SetFloat("_Arc1", 0f);
+    }
+    public void DeathSpirit()
     {
         isActivate = false;
-        spiderDeathCondition.ActivationCondition();
         StartCoroutine(Recharge());
     }
-    public int GetFear() => fear;
     private IEnumerator Recharge()
     {
         float time = timeRecharge;
         while(time > 0)
         {
             time -= Time.deltaTime;
-            material.SetFloat("_Arc1", 360 / timeRecharge * time);
+            material.SetFloat("_Arc1", 360f / timeRecharge * time);
             yield return null;
         }
         isClickable = true;
